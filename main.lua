@@ -1,13 +1,15 @@
 local paused, applyRules, display
+local aliveCells = {}
 local screenDim = {}
-local aliveCells = {{20, 14}, {19, 15}, {20, 15}, {20, 16}, {21, 16}}
-local zoom = 2
-local speed = 1
+local zoom = 1
+local speed = 10
 local timer = 0
 
 function love.load(args)
     love.graphics.setDefaultFilter("nearest", "nearest")
     screenDim.x, screenDim.y = love.graphics.getDimensions()
+    local x, y = math.floor(screenDim.x / (2 * 10 * zoom)), math.floor(screenDim.y / (2 * 10 * zoom))
+    aliveCells = {{x, y - 1}, {x - 1, y}, {x, y}, {x, y + 1}, {x + 1, y + 1}}
 
     applyRules = require 'src.GolRules'
     display = require 'src.Display'
