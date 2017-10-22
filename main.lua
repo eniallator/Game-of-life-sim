@@ -1,4 +1,4 @@
-local screenDim, aliveCells, zoom, golRules, display = {}, {}, 0.5
+local screenDim, aliveCells, zoom, golRules, display = {}, {}, 0.4
 
 function love.load(args)
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -8,7 +8,7 @@ function love.load(args)
     display = require 'src.Display'
 end
 
-function love.update(args)
+function love.update(dt)
 
 end
 

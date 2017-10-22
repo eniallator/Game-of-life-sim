@@ -24,7 +24,7 @@ local function stackNeighbours(total, neighbours)
     for cell in neighbours do
         local added = false
 
-        for pos in total do
+        for _, pos in pairs(total) do
             if utils.compare(cell, pos) then
                 pos[3] = pos[3] + 1
                 added = true
