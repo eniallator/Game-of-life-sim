@@ -1,6 +1,11 @@
-local utils = require 'src.Utils'
 local createSpriteBatch = require 'src.SpriteBatch'
+local applyRules = require 'src.Gol.Rules'
+local utils = require 'src.Utils'
 
+local Gol = {}
+Gol.aliveCells = {}
+
+local timer = 0
 local textures = {
     tileSize = 10,
     deadCell = love.graphics.newImage('assets/textures/tiles/dead_cell.png'),
@@ -10,8 +15,6 @@ local tiles = {
     deadCell = createSpriteBatch(textures.deadCell, 10000, 'stream'),
     aliveCell = createSpriteBatch(textures.aliveCell, 10000, 'stream')
 }
-
-local display = {}
 
 local function populateSpriteBatch(aliveCells, screenDim, zoom, offset)
     for x = 0, screenDim.x / (textures.tileSize * zoom) + 1 do
@@ -26,16 +29,25 @@ local function populateSpriteBatch(aliveCells, screenDim, zoom, offset)
     end
 end
 
-display.cells = function(aliveCells, screenDim, zoom, offset)
+Gol.display = function(screenDim, zoom, offset)
     for _, batch in pairs(tiles) do
         batch:clear()
     end
 
-    populateSpriteBatch(aliveCells, screenDim, zoom, offset)
+    populateSpriteBatch(Gol.aliveCells, screenDim, zoom, offset)
 
     for _, batch in pairs(tiles) do
         batch:draw(offset.x % (textures.tileSize * zoom), offset.y % (textures.tileSize * zoom))
     end
 end
 
-return display
+Gol.update = function(dt, speed)
+    while timer > 1 / speed do
+        timer = timer - 1 / speed
+        Gol.aliveCells = applyRules(Gol.aliveCells)
+    end
+
+    timer = timer + dt
+end
+
+return Gol
