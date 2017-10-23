@@ -19,7 +19,7 @@ local tiles = {
 local function populateSpriteBatch(aliveCells, screenDim, zoom, offset)
     for x = 0, screenDim.x / (textures.tileSize * zoom) + 1 do
         for y = 0, screenDim.y / (textures.tileSize * zoom) + 1 do
-            if utils.find({math.floor(offset.x / (textures.tileSize * zoom)) + x, math.floor(offset.y / (textures.tileSize * zoom)) + y}, aliveCells) then
+            if utils.find({math.floor(offset.x / (textures.tileSize * zoom)) - x, math.floor(offset.y / (textures.tileSize * zoom)) - y}, aliveCells) then
                 tiles.aliveCell:add((x - 1) * textures.tileSize * zoom, (y - 1) * textures.tileSize * zoom, 0, zoom, zoom)
 
             else

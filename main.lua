@@ -1,6 +1,5 @@
 local paused, gol, input
 local screenDim = {}
-local offset = {x = 15, y = 15}
 
 function love.load(args)
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -9,7 +8,7 @@ function love.load(args)
     input = require 'src.Input'
     gol = require 'src.Gol.Gol'
     
-    local x, y = math.floor(screenDim.x / (2 * 10 * input.zoom)), math.floor(screenDim.y / (2 * 10 * input.zoom))
+    local x, y = -math.floor(screenDim.x / (2 * 10 * input.zoom)), -math.floor(screenDim.y / (2 * 10 * input.zoom))
     gol.aliveCells = {{x, y - 1}, {x - 1, y}, {x, y}, {x, y + 1}, {x + 1, y + 1}}
 end
 
@@ -19,5 +18,5 @@ function love.update(dt)
 end
 
 function love.draw()
-    gol.display(screenDim, input.zoom, offset)
+    gol.display(screenDim, input.zoom, input.offset)
 end
