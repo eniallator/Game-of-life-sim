@@ -5,13 +5,13 @@ input.offset = {x = 0, y = 0}
 input.zoom = 3
 input.speed = 3
 
-local offsetLastPos = {x = 0, y = 0}
+local mouseLastPos = {}
 local zoomLowerLimit = 0.6
 local zoomUpperLimit = 10
 local zoomRate = 1 / 5
 
-local function updateZoom(tilePixels)
-    local nextPos = input.zoom + (mouse.wheel * zoomRate)
+local function updateZoom(screenDim, tilePixels)
+    local nextPos = input.zoom + input.zoom * (mouse.wheel * zoomRate)
 
     if mouse.wheel ~= 0 and nextPos >= zoomLowerLimit and nextPos <= zoomUpperLimit then
         -- local mouseCurrPos = {}
@@ -28,19 +28,24 @@ local function updateZoom(tilePixels)
 end
 
 local function updateOffset()
+    local mouseCurrPos = {}
+    mouseCurrPos.x, mouseCurrPos.y = love.mouse.getPosition()
+
+    if mouse.left.clicked then
+        mouseLastPos.x, mouseLastPos.y = love.mouse.getPosition()
+    end
+
     if mouse.left.held then
-        local mouseCurrPos = {}
-        mouseCurrPos.x, mouseCurrPos.y = love.mouse.getPosition()
-        input.offset.x = offsetLastPos.x + (mouseCurrPos.x - mouse.left.pos.x)
-        input.offset.y = offsetLastPos.y + (mouseCurrPos.y - mouse.left.pos.y)
-    else
-        offsetLastPos.x = input.offset.x
-        offsetLastPos.y = input.offset.y
+        input.offset.x = input.offset.x + mouseCurrPos.x - mouseLastPos.x
+        input.offset.y = input.offset.y + mouseCurrPos.y - mouseLastPos.y
+
+        mouseLastPos.x = mouseCurrPos.x
+        mouseLastPos.y = mouseCurrPos.y
     end
 end
 
-input.update = function(dt, tilePixels)
-    updateZoom(tilePixels)
+input.update = function(dt, screenDim, tilePixels)
+    updateZoom(screenDim, tilePixels)
     updateOffset()
     mouse.reset()
 end
