@@ -1,4 +1,4 @@
-local utils = require 'src.Utils'
+local utils = require 'src.Utils.Utils'
 
 local function findDeadNeighbours(cycle, index)
     local deadNeighbours = {}

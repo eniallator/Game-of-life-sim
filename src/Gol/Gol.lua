@@ -1,6 +1,6 @@
 local createSpriteBatch = require 'src.SpriteBatch'
 local applyRules = require 'src.Gol.Rules'
-local utils = require 'src.Utils'
+local utils = require 'src.Utils.Utils'
 
 local Gol = {}
 Gol.aliveCells = {}
