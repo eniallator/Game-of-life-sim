@@ -14,7 +14,7 @@ end
 
 function love.update(dt)
     gol.update(dt, input.speed, aliveCells)
-    input.update(dt)
+    input.update(dt, gol.tilePixels)
 end
 
 function love.draw()

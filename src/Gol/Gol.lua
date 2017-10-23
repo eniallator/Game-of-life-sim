@@ -1,13 +1,13 @@
 local createSpriteBatch = require 'src.SpriteBatch'
-local applyRules = require 'src.Gol.Rules'
+local applyRules = require 'src.gol.Rules'
 local utils = require 'src.Utils.Utils'
 
-local Gol = {}
-Gol.aliveCells = {}
+local gol = {}
+gol.aliveCells = {}
+gol.tilePixels = 10
 
 local timer = 0
 local textures = {
-    tileSize = 10,
     deadCell = love.graphics.newImage('assets/textures/tiles/dead_cell.png'),
     aliveCell = love.graphics.newImage('assets/textures/tiles/alive_cell.png')
 }
@@ -17,37 +17,37 @@ local tiles = {
 }
 
 local function populateSpriteBatch(aliveCells, screenDim, zoom, offset)
-    for x = 0, screenDim.x / (textures.tileSize * zoom) + 1 do
-        for y = 0, screenDim.y / (textures.tileSize * zoom) + 1 do
-            if utils.find({math.floor(offset.x / (textures.tileSize * zoom)) - x, math.floor(offset.y / (textures.tileSize * zoom)) - y}, aliveCells) then
-                tiles.aliveCell:add((x - 1) * textures.tileSize * zoom, (y - 1) * textures.tileSize * zoom, 0, zoom, zoom)
+    for x = 0, screenDim.x / (gol.tilePixels * zoom) + 1 do
+        for y = 0, screenDim.y / (gol.tilePixels * zoom) + 1 do
+            if utils.find({math.floor(offset.x / (gol.tilePixels * zoom)) - x, math.floor(offset.y / (gol.tilePixels * zoom)) - y}, aliveCells) then
+                tiles.aliveCell:add((x - 1) * gol.tilePixels * zoom, (y - 1) * gol.tilePixels * zoom, 0, zoom, zoom)
 
             else
-                tiles.deadCell:add((x - 1) * textures.tileSize * zoom, (y - 1) * textures.tileSize * zoom, 0, zoom, zoom)
+                tiles.deadCell:add((x - 1) * gol.tilePixels * zoom, (y - 1) * gol.tilePixels * zoom, 0, zoom, zoom)
             end
         end
     end
 end
 
-Gol.display = function(screenDim, zoom, offset)
+gol.display = function(screenDim, zoom, offset)
     for _, batch in pairs(tiles) do
         batch:clear()
     end
 
-    populateSpriteBatch(Gol.aliveCells, screenDim, zoom, offset)
+    populateSpriteBatch(gol.aliveCells, screenDim, zoom, offset)
 
     for _, batch in pairs(tiles) do
-        batch:draw(offset.x % (textures.tileSize * zoom), offset.y % (textures.tileSize * zoom))
+        batch:draw(offset.x % (gol.tilePixels * zoom), offset.y % (gol.tilePixels * zoom), 0)
     end
 end
 
-Gol.update = function(dt, speed)
+gol.update = function(dt, speed)
     while timer > 1 / speed do
         timer = timer - 1 / speed
-        Gol.aliveCells = applyRules(Gol.aliveCells)
+        gol.aliveCells = applyRules(gol.aliveCells)
     end
 
     timer = timer + dt
 end
 
-return Gol
+return gol
