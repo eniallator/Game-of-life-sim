@@ -1,9 +1,10 @@
 local paused, applyRules, display
 local aliveCells = {}
 local screenDim = {}
-local zoom = 1
-local speed = 10
+local offset = {x = 15, y = 15}
+local speed = 3
 local timer = 0
+local zoom = 3
 
 function love.load(args)
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -25,5 +26,5 @@ function love.update(dt)
 end
 
 function love.draw()
-    display.cells(aliveCells, screenDim, zoom)
+    display.cells(aliveCells, screenDim, zoom, offset)
 end
